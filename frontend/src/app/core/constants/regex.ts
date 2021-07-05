@@ -1,0 +1,1 @@
+export const IMG_REGEX = /<img([\w\W]+?)\/?>/g

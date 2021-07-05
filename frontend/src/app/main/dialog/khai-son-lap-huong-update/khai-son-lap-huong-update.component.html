@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Cập nhật Khai sơn lập hướng</h1>
+<div mat-dialog-content>
+    <form [formGroup]="kslhForm" (ngSubmit)="onSave()">
+        <div class="input-form">
+            <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Hướng</mat-label>
+                <input matInput type="text" id="name" [value]="directions[data.direction]" readonly>
+            </mat-form-field>
+            <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
+            <mat-error *ngIf="kslhForm.get('content').hasError('content_image')">Nội dung không được chứa ảnh</mat-error>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button (click)="onSave()" [disabled]="kslhForm.invalid" color="primary">Lưu</button>
+</div>

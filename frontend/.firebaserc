@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "chatapp-f0151": {
+      "hosting": {
+        "frontend": [
+          "chatapp-f0151"
+        ]
+      }
+    }
+  }
+}

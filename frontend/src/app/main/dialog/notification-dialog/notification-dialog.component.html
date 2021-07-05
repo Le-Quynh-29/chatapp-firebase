@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>Gửi thông báo</h1>
+
+<div mat-dialog-content>
+    <form [formGroup]="notificationForm">
+        <div class="input-form">
+            <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Tiêu đề</mat-label>
+                <input matInput type="text" id="title" name="title" required formControlName="title">
+                <mat-error *ngIf="notificationForm.get('title').hasError('required')">Xin hãy nhập tiêu đề</mat-error>
+                <mat-error *ngIf="notificationForm.get('title').hasError('maxlength')">Độ dài tối đa 65</mat-error>
+            </mat-form-field>
+            <!-- <div *ngIf="!preview; then realAvatar else previewAvatar"></div>
+            <div class="image-view">
+                <ng-template #realAvatar>
+                    <img src="assets\\images\\default.png" alt="user avatar" width="200" height="250">
+                </ng-template>
+                <ng-template #previewAvatar>
+                    <img src="{{ preview }}" alt="preview avatar" width="200" height="250">
+                </ng-template>
+            </div> -->
+            <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Nội dung</mat-label>
+                <textarea matInput id="body" name="body" required formControlName="body"></textarea>
+                <mat-error *ngIf="notificationForm.get('body').hasError('required')">Xin hãy nhập nội dung</mat-error>
+                <mat-error *ngIf="notificationForm.get('body').hasError('maxlength')">Độ dài tối đa 240</mat-error>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <!-- <input type="file" style="display: none" #uploadAvatar (change)="onFileChange($event)">
+    <button mat-stroked-button (click)="uploadAvatar.click()" color="primary">Chọn ảnh</button> -->
+    <button mat-flat-button (click)="onSubmit()" [disabled]="notificationForm.invalid || sending" color="primary">Gửi</button>
+</div>

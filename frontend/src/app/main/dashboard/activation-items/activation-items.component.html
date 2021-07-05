@@ -1,0 +1,9 @@
+<h2>Cập nhật Vật phẩm kích hoạt</h2>
+<mat-list role="list">
+    <mat-list-item role="listitem" *ngFor="let item of items">
+        <p class="item">
+            {{Directions[item.direction]}} - {{item.name}}
+            <button mat-flat-button (click)="openItemUpdateDialog(item)" class="update" color="primary">Cập nhật</button>
+        </p>
+    </mat-list-item>
+</mat-list>

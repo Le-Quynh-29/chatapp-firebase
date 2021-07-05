@@ -1,0 +1,27 @@
+<block-ui></block-ui>
+<div class="button-row" fxLayout="row" fxLayoutAlign="center center">
+  <a mat-raised-button routerLink="/dashboard/activation-items" color="primary">Vật phẩm kích hoạt</a>
+  <a mat-raised-button routerLink="/dashboard/activation-principles" color="primary">Nguyên lý kích hoạt</a>
+  <a mat-raised-button routerLink="/dashboard/khai-son-lap-huong" color="primary">Khai Sơn Lập Hướng</a>
+  <a mat-raised-button routerLink="/chat" color="primary">App Chat</a>
+</div>
+<div class="chat-container">
+  <div class="chat mat-elevation-z4">
+    <mat-sidenav-container>
+
+      <mat-sidenav class="mat-elevation-z2" mode="side" [opened]="true" #chatSidenav>
+        <app-contacts 
+          [chats]="conversations" 
+          (onActiveChat)="onActiveChat($event)"
+        ></app-contacts>
+      </mat-sidenav>
+
+      <app-content 
+        [messages]="messages" 
+        [activeChat]="activeChat" 
+        [chatSidenav]="chatSidenav"
+      ></app-content>
+
+    </mat-sidenav-container>
+  </div>
+</div>

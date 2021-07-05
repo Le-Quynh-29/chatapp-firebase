@@ -1,0 +1,21 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.button-row {
+    display: table;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-row .mat-button-base {
+    margin: 8px 8px 20px 0;
+}
+
+.children {
+    width: 50%;
+}

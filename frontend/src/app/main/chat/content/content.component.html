@@ -1,0 +1,76 @@
+
+<div class="chat-inner-container">
+  <mat-toolbar color="primary">
+    <div class="toolbar" fxLayout="row">
+      <button mat-icon-button (click)="onChatSideTriggered()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <div class="current-contact" fxLayout="row" fxLayoutAlign="start center" *ngIf="activeChat">
+        <img class="avatar pointer" src="assets/img/avatars/noavatar.png">
+
+        <div fxLayout="column">
+          <span class="name">{{ activeChat.conversationName }}</span>
+          <!-- <span class="status">Online</span> -->
+        </div>
+      </div>
+    </div>
+  </mat-toolbar>
+  <!-- Active chat -->
+  <div class="chat-content" fxLayout="column" fxLayoutAlign="end stretch" *ngIf="activeChat">
+    <perfect-scrollbar 
+      #chatScroll 
+      [config]="DEFAULT_PERFECT_SCROLLBAR_CONFIG"
+    >
+      <div class="messages-container">
+        <div class="chat-message" *ngFor="let message of messages" [ngSwitch]="message.senderId" fxLayout="column" fxLayoutAlign="end start">
+          <div class="partner" *ngSwitchDefault fxFlexAlign="start" fxLayout="row" fxLayoutAlign="start start">
+            <img class="avatar" src="assets/img/avatars/noavatar.png">
+            <div class="message mat-elevation-z1">
+              <span>{{ message.message }}</span>
+              <div class="time secondary-text">{{ message.createdAt | date:'short' }}</div>
+            </div>
+          </div>
+          <div class="me" *ngSwitchCase="1" fxFlexAlign="end" fxLayout="row" fxLayoutAlign="end start">
+            <div class="message mat-elevation-z1">
+              <span>{{ message.message }}</span>
+              <div class="time secondary-text">{{ message.createdAt | date:'short' }}</div>
+            </div>
+            <img class="avatar" src="assets/img/avatars/8.jpg">
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+
+
+    <div class="chat-respond" fxLayout="row" fxLayoutAlign="start center">
+      <mat-form-field fxFlex>
+        <textarea matInput (keyup.enter)="send()" [(ngModel)]="newMessage" placeholder=""></textarea>
+      </mat-form-field>
+      <button (click)="send()" mat-fab color="primary"><mat-icon>send</mat-icon></button>
+    </div>
+  </div>
+  <!-- No active chat -->
+  <div class="chat-content chat-start" fxLayout="column" fxLayoutAlign="center center" *ngIf="!activeChat">
+
+    <div 
+      fxLayout="column" fxLayoutAlign="center center"
+      class="big-circle app-logo"
+      [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}"
+    >
+      <mat-icon class="s-64 s-md-128 mat-primary">chat</mat-icon>
+    </div>
+
+    <span class="app-title mt-48 mb-8" [@animate]="{value:'*',params:{delay:'100ms',y:'25px'}}">
+      Chat App
+    </span>
+
+    <span fxHide fxShow.gt-md class="app-message" [@animate]="{value:'*',params:{delay:'200ms',y:'50px'}}">
+      Select a contact to start a chat!
+    </span>
+
+    <button mat-raised-button fxHide.gt-md fuseMatSidenavToggler="chat-left-sidenav">
+      Select a contact to start a chat!
+    </button>
+  </div>
+</div>

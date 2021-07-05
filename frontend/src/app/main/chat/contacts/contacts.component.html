@@ -1,0 +1,41 @@
+<div class="sidenav-container">
+  <mat-toolbar color="primary">
+    <div class="toolbar" fxLayout="row" fxLayoutAlign="start center">
+      <img class="avatar pointer" src="assets/img/avatars/8.jpg">
+      <h3 class="name-chat" mat-line>Chats</h3>
+    </div>
+  </mat-toolbar>
+
+  <div class="chat-contacts-container" fxLayout="column">
+    <perfect-scrollbar>
+      <mat-nav-list class="chat-contacts">
+        <mat-list-item 
+          class="chat-contact" 
+          color="primary"
+          (click)="setActiveChat(chat)" 
+          *ngFor="let chat of chats" 
+          [ngClass]="{'active': chat === chatSelected}"
+          mat-ripple
+        >
+          <img src="assets/img/avatars/noavatar.png" mat-list-avatar>
+          <h3 
+            class="name"
+            [ngClass]="{'font-weight-bold': chat.lastSenderId != senderIdOwner && chat.ownerRead == unRead }"  
+            mat-line>
+            {{ chat.conversationName }}
+          </h3>
+          <p 
+            class="last-message" 
+            [ngClass]="{'font-weight-bold': chat.lastSenderId != senderIdOwner && chat.ownerRead == unRead }" 
+            mat-line
+          > 
+            {{ chat.lastMessage }}
+            <span class="secondary-text" style="float: right; font-size: 9px; font-weight: normal;">
+              {{ chat.lastMessageTime | date: 'hh:mm' }}
+            </span>
+          </p>
+        </mat-list-item>
+      </mat-nav-list>
+    </perfect-scrollbar>
+  </div>
+</div>

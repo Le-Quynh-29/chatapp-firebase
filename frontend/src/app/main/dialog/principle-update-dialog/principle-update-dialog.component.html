@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>Cập nhật Nguyên lý kích hoạt</h1>
+<div mat-dialog-content>
+    <form [formGroup]="principleForm" (ngSubmit)="onSave()">
+        <div class="input-form">
+            <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Hướng</mat-label>
+                <input matInput type="text" id="name" [value]="directions[data.direction]" readonly>
+            </mat-form-field>
+            <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Nguyên lý</mat-label>
+                <input matInput type="text" id="name" name="name" required formControlName="name">
+                <mat-error *ngIf="principleForm.get('name').hasError('required')">Xin mời nhập nguyên lý</mat-error>
+                <mat-error *ngIf="principleForm.get('name').hasError('maxlength')">Độ dài tối đa là 20</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Hành</mat-label>
+                <mat-select formControlName="phase" required>
+                    <mat-option *ngFor="let phase of phases" [value]="phase.id">
+                    {{phase.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
+        <mat-error *ngIf="principleForm.get('content').hasError('content_image')">Nội dung không được chứa ảnh</mat-error>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button (click)="onSave()" [disabled]="principleForm.invalid" color="primary">Lưu</button>
+</div>

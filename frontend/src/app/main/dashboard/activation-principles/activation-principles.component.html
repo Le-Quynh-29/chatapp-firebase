@@ -1,0 +1,10 @@
+<h2>Cập nhật Nguyên lý kích hoạt</h2>
+<mat-list role="list">
+    <mat-list-item role="listitem" *ngFor="let item of data">
+        <p class="item">
+            {{Directions[item.direction]}} - {{item.name}}
+            <!-- <img src="{{ item.image | imageUrl}}" alt="item image" width="200" height="250"> -->
+            <button mat-flat-button (click)="openUpdateDialog(item)" class="update" color="primary">Cập nhật</button>
+        </p>
+    </mat-list-item>
+</mat-list>

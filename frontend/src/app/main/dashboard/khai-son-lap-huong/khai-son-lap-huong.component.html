@@ -1,0 +1,19 @@
+<div class="title">
+    <h2>Cập nhật Khai sơn lập hướng</h2>
+    <div>
+        <mat-button-toggle-group name="fontStyle" [value]="attribute" (change)="toggleChange($event)" aria-label="Font Style">
+            <mat-button-toggle value="xây mới">Xây mới</mat-button-toggle>
+            <mat-button-toggle value="sửa chữa">Sửa chữa</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+</div>
+
+<mat-list role="list">
+    <mat-list-item role="listitem" *ngFor="let item of data">
+        <p class="item">
+            {{Directions[item.direction]}}
+            <!-- <img src="{{ item.image | imageUrl}}" alt="item image" width="200" height="250"> -->
+            <button mat-flat-button (click)="openUpdateDialog(item)" class="update" color="primary">Cập nhật</button>
+        </p>
+    </mat-list-item>
+</mat-list>

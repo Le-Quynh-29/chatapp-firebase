@@ -1,0 +1,17 @@
+h2 {
+    display: flex;
+    justify-content: center;
+}
+
+.mat-list-item {
+    margin-bottom:10px;
+    border-bottom: 1px solid grey;
+}
+
+.item {
+    width: 100%;
+}
+
+.update {
+    float: right;
+}

@@ -1,0 +1,49 @@
+{
+  "conversations": [
+    {
+      "conversationName": "Angular 2 交流群",
+      "members": [
+        1,
+        2
+      ],
+      "lastMessage": "Angular 2 有哪些开源项目?",
+      "lastMessageTime": "2021/06/09 8:20:01",
+      "messages": [
+        {
+          "message": "这是 Angular 2 交流群",
+          "createdAt": "2021/06/09 8:19:09",
+          "senderId": 1
+        },
+        {
+          "message": "Angular 2 有哪些开源项目?",
+          "createdAt": "2021/06/09 8:20:01",
+          "senderId": 2
+        }
+      ]
+    }
+  ],
+  "hosting": {
+    "target": "frontend",
+    "public": "dist/frontend",
+    "ignore": [
+      "**/.*"
+    ],
+    "headers": [
+      {
+        "source": "*.[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].+(css|js)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=31536000,immutable"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

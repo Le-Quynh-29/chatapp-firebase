@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>Cập nhật Vật phẩm kích hoạt</h1>
+
+<div mat-dialog-content>
+    <form [formGroup]="itemForm">
+        <div class="input-form">
+            <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Hướng</mat-label>
+                <input matInput type="text" id="name" [value]="directions[data.direction]" readonly>
+            </mat-form-field>
+            <mat-form-field class="w-100" appearance="outline">
+                <mat-label>Tên vật phẩm</mat-label>
+                <input matInput type="text" id="name" name="name" required formControlName="name">
+                <mat-error *ngIf="itemForm.get('name').hasError('required')">Xin hãy nhập tên vật phẩm</mat-error>
+                <mat-error *ngIf="itemForm.get('name').hasError('maxlength')">Độ dài tối đa là 20</mat-error>
+            </mat-form-field>
+            <div *ngIf="!preview; then realAvatar else previewAvatar"></div>
+            <div class="image-view">
+                <ng-template #realAvatar>
+                    <img src="{{data.image | imageUrl}}" alt="user avatar" width="200" height="250">
+                </ng-template>
+                <ng-template #previewAvatar>
+                    <img src="{{ preview }}" alt="preview avatar" width="200" height="250">
+                </ng-template>
+            </div>
+            <ckeditor [editor]="Editor" formControlName="content"></ckeditor>
+            <mat-error *ngIf="itemForm.get('content').hasError('content_image')">Nội dung không được chứa ảnh</mat-error>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <input type="file" style="display: none" #uploadAvatar (change)="onFileChange($event)">
+    <button mat-stroked-button (click)="uploadAvatar.click()" color="primary">Chọn ảnh</button>
+    <button mat-flat-button (click)="onSubmit()" [disabled]="itemForm.invalid" color="primary">Lưu</button>
+</div>
