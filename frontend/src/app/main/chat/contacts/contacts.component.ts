@@ -8,20 +8,24 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 export class ContactsComponent implements OnInit {
 
   @Input() chats;
-  // tslint:disable-next-line:no-output-on-prefix
+  @Input() userRead;
   @Output() onActiveChat = new EventEmitter();
 
-  senderIdOwner = 1;
-  read = 1;
-  unRead = 2;
   chatSelected: any;
+  userName: string;
+  checkLogin: any;
+  authId: any;
 
-  constructor() { }
+  constructor() {}
 
-  // tslint:disable-next-line:typedef
-  ngOnInit() { }
+  ngOnInit() {
+    this.checkLogin = localStorage.getItem('currentUser');
+    if (this.checkLogin != null) {
+      this.userName = JSON.parse(this.checkLogin).name;
+      this.authId = JSON.parse(this.checkLogin).user_id;
+    }
+  }
 
-  // tslint:disable-next-line:typedef
   setActiveChat(chat) {
     this.chatSelected = chat;
     this.onActiveChat.emit(chat);

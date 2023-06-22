@@ -12,11 +12,6 @@ const routes: Routes = [
     component: DashboardComponent,
     children: [
       {
-        path: '',
-        redirectTo: 'activation-items',
-        pathMatch: 'full'
-      },
-      {
         path: 'activation-items',
         component: ActivationItemsComponent
       },

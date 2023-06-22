@@ -1,4 +1,13 @@
-import { Component, Input, ViewEncapsulation, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewEncapsulation,
+  ViewChild,
+  OnInit,
+  Output,
+  EventEmitter,
+  AfterViewChecked
+} from '@angular/core';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { fuseAnimations } from '../../../core/animations';
 import * as moment from 'moment';
@@ -17,10 +26,10 @@ export class ContentComponent implements OnInit {
   @Input() chatSidenav;
   @Input() activeChat;
   @Input() messages;
+  @Input() authId;
+  @Input() userRead;
+  @Output() onActiveChat = new EventEmitter();
 
-  senderIdOwner = 1;
-  read = 1;
-  unRead = 2;
   newMessage: any;
 
   @ViewChild('chatScroll') public chatScroll: PerfectScrollbarComponent;
@@ -28,28 +37,24 @@ export class ContentComponent implements OnInit {
 
   constructor() { }
 
-  // tslint:disable-next-line:typedef
-  ngOnInit() { }
+  ngOnInit() {}
 
-  // tslint:disable-next-line:typedef use-lifecycle-interface
   ngOnChanges() {
     if (this.activeChat) {
       this.scrollToBottom();
     }
   }
 
-  // tslint:disable-next-line:typedef
   send() {
-    if (this.newMessage && this.newMessage !== null) {
+    if (this.newMessage && this.newMessage.trim() != '') {
       const message = this.newMessage;
       const now = moment().format('YYYY/MM/DD HH:mm:ss');
       const key = this.activeChat.key;
       const conversationRef = firebase.database().ref(`conversations/${key}`);
-
       const chat = {
         message,
         createdAt: now,
-        senderId: this.senderIdOwner
+        senderId: this.authId
       };
 
       if (this.messages && this.messages.length > 0) {
@@ -61,18 +66,18 @@ export class ContentComponent implements OnInit {
 
       conversationRef.child('lastMessage').set(message);
       conversationRef.child('lastMessageTime').set(now);
-      conversationRef.child('lastSenderId').set(this.senderIdOwner);
-      conversationRef.child('ownerRead').set(this.read);
-      conversationRef.child('userRead').set(this.unRead);
+      conversationRef.child('lastSenderId').set(this.authId);
+      conversationRef.child('checkSeenMessage').set([this.authId]);
+      conversationRef.child('ownerRead').set(this.authId);
+      conversationRef.child('userRead').set(this.userRead);
       conversationRef.child('messages').set(this.messages);
-
+      // this.onActiveChat.emit(this.activeChat);
       this.newMessage = null;
     }
 
     this.scrollToBottom();
   }
 
-  // tslint:disable-next-line:typedef
   scrollToBottom() {
     setTimeout(() => {
       this.chatScroll.directiveRef.update();
@@ -80,7 +85,6 @@ export class ContentComponent implements OnInit {
     }, 200);
   }
 
-  // tslint:disable-next-line:typedef
   onChatSideTriggered() {
     this.chatSidenav.toggle();
   }

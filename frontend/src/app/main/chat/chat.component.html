@@ -1,25 +1,29 @@
 <block-ui></block-ui>
 <div class="button-row" fxLayout="row" fxLayoutAlign="center center">
-  <a mat-raised-button routerLink="/dashboard/activation-items" color="primary">Vật phẩm kích hoạt</a>
-  <a mat-raised-button routerLink="/dashboard/activation-principles" color="primary">Nguyên lý kích hoạt</a>
-  <a mat-raised-button routerLink="/dashboard/khai-son-lap-huong" color="primary">Khai Sơn Lập Hướng</a>
-  <a mat-raised-button routerLink="/chat" color="primary">App Chat</a>
+  <a mat-raised-button routerLink="/chat" color="primary" *ngIf="checkLogin != null">App Chat</a>
+  <a mat-raised-button routerLink="/auth" *ngIf="checkLogin == null">Đăng nhập</a>
+  <a mat-raised-button routerLink="/auth/register" *ngIf="checkLogin == null">Đăng Ký</a>
+  <a mat-raised-button (click)="logout()" *ngIf="checkLogin != null">Đăng xuất</a>
 </div>
 <div class="chat-container">
   <div class="chat mat-elevation-z4">
     <mat-sidenav-container>
 
       <mat-sidenav class="mat-elevation-z2" mode="side" [opened]="true" #chatSidenav>
-        <app-contacts 
-          [chats]="conversations" 
+        <app-contacts
+          [chats]="conversations"
           (onActiveChat)="onActiveChat($event)"
+          [userRead]="userRead"
         ></app-contacts>
       </mat-sidenav>
 
-      <app-content 
-        [messages]="messages" 
-        [activeChat]="activeChat" 
+      <app-content
+        [messages]="messages"
+        [activeChat]="activeChat"
         [chatSidenav]="chatSidenav"
+        [authId]="authId"
+        [userRead]="userRead"
+        (onActiveChat)="onActiveChat($event)"
       ></app-content>
 
     </mat-sidenav-container>

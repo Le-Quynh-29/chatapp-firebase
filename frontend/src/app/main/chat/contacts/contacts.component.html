@@ -2,33 +2,30 @@
   <mat-toolbar color="primary">
     <div class="toolbar" fxLayout="row" fxLayoutAlign="start center">
       <img class="avatar pointer" src="assets/img/avatars/8.jpg">
-      <h3 class="name-chat" mat-line>Chats</h3>
+      <h3 class="name-chat" mat-line>{{ userName }}</h3>
     </div>
   </mat-toolbar>
 
   <div class="chat-contacts-container" fxLayout="column">
     <perfect-scrollbar>
-      <mat-nav-list class="chat-contacts">
-        <mat-list-item 
-          class="chat-contact" 
+      <mat-nav-list class="chat-contacts" id="chat-contacts">
+        <mat-list-item
+          class="chat-contact"
           color="primary"
-          (click)="setActiveChat(chat)" 
-          *ngFor="let chat of chats" 
+          *ngFor="let chat of chats"
+          (click)="setActiveChat(chat)"
           [ngClass]="{'active': chat === chatSelected}"
           mat-ripple
         >
           <img src="assets/img/avatars/noavatar.png" mat-list-avatar>
-          <h3 
+          <h3
             class="name"
-            [ngClass]="{'font-weight-bold': chat.lastSenderId != senderIdOwner && chat.ownerRead == unRead }"  
+            [ngClass]="{'font-weight-bold': chat.messages && chat.checkSeenMessage.indexOf(authId) == -1 }"
             mat-line>
-            {{ chat.conversationName }}
+            {{ chat.members.indexOf(authId) == 0 ? chat.conversationName[1] :  chat.conversationName[0]}}
           </h3>
-          <p 
-            class="last-message" 
-            [ngClass]="{'font-weight-bold': chat.lastSenderId != senderIdOwner && chat.ownerRead == unRead }" 
-            mat-line
-          > 
+          <p class="last-message" mat-line
+            [ngClass]="{'font-weight-bold': chat.messages && chat.checkSeenMessage.indexOf(authId) == -1 }">
             {{ chat.lastMessage }}
             <span class="secondary-text" style="float: right; font-size: 9px; font-weight: normal;">
               {{ chat.lastMessageTime | date: 'hh:mm' }}

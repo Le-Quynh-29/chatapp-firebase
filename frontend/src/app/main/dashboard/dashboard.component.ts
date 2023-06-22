@@ -12,6 +12,7 @@ import { NotificationDialogComponent } from '../dialog/notification-dialog/notif
 export class DashboardComponent implements OnInit {
 
   data: any;
+  checkLogin: any;
   constructor(
     private _matDialog: MatDialog,
     private _dashboardService: DashboardService
@@ -19,6 +20,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getIntroduction();
+    this.checkLogin = localStorage.getItem('currentUser');
   }
 
   getIntroduction() {

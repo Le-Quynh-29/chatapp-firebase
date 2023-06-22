@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewEncapsulation, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { fadeInAnimation } from '../../core/animations';
+import {Component, OnInit, ViewEncapsulation, AfterViewChecked, ChangeDetectorRef} from '@angular/core';
+import {BlockUI, NgBlockUI} from 'ng-block-ui';
+import {fadeInAnimation} from '../../core/animations';
 import firebase from 'firebase';
+import {UserService} from "../../core/services";
+import {Router} from "@angular/router";
 
 export const snapshotToArray = (snapshot: any) => {
   const arr = [];
 
   snapshot.forEach((childSnapshot: any) => {
-      const item = childSnapshot.val();
-      item.key = childSnapshot.key;
-      arr.push(item);
+    const item = childSnapshot.val();
+    item.key = childSnapshot.key;
+    arr.push(item);
   });
 
   return arr;
@@ -20,90 +22,102 @@ export const snapshotToArray = (snapshot: any) => {
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  // tslint:disable-next-line:no-host-metadata-property
   host: {
     '[@fadeInAnimation]': 'true'
   },
   animations: [fadeInAnimation]
 })
 
-export class ChatComponent implements OnInit, AfterViewChecked {
+export class ChatComponent implements OnInit {
 
-  // tslint:disable-next-line:variable-name
   _refConversation = firebase.database().ref('conversations/');
   conversations = [];
   activeChat: any;
   messages: any[];
+  checkLogin: any;
+  listUser: any[] = [];
+  authId: any;
+  userRead: any;
+  username: any;
+  indexCreateConversation: number = 0;
 
   @BlockUI() blockUI: NgBlockUI;
 
   constructor(
-    private cdr: ChangeDetectorRef
-  ) { }
+    private cdr: ChangeDetectorRef,
+    private userService: UserService,
+    private _router: Router,
+  ) {
+  }
 
-  // tslint:disable-next-line:typedef
   ngOnInit() {
-    // start blocking
-    this.blockUI.start();
     // orderByChild default asc
     this._refConversation.orderByChild('lastMessageTime').on('value', resp => {
-      this.conversations = snapshotToArray(resp);
-      // reverse order last message time desc
-      this.conversations = this.conversations.reverse();
-      // set time out stop blocking
-      setTimeout(() => {
-        this.blockUI.stop();
-      }, 1000);
-    });
-    // create conversation demo
-    // this.createConversation();
-  }
-
-  // tslint:disable-next-line:typedef
-  ngAfterViewChecked() {
-    if (this.activeChat) {
-      const key = this.activeChat.key;
-      const conversation = this.conversations.filter(item => item.key === key)[0];
-      if (conversation) {
-        this.activeChat = conversation;
+      this.checkLogin = localStorage.getItem('currentUser');
+      if (this.checkLogin != null) {
+        const conversation = snapshotToArray(resp);
+        this.checkLogin = JSON.parse(this.checkLogin);
+        this.authId = this.checkLogin.user_id;
+        this.username = this.checkLogin.name;
+        this.userService.getUsers().subscribe(
+          (data: any) => {
+            this.listUser = data;
+            if (conversation.length > 0) {
+              this.conversations = conversation.filter(value => value.members.indexOf(this.authId) != -1).reverse();
+              if (this.listUser.length - 1 != this.conversations.length) {
+                  this.createConversation();
+              }
+              this.indexCreateConversation += 1;
+            } else {
+              this.createConversation();
+              this.indexCreateConversation += 1;
+            }
+          }, (error: any) => {
+          }
+        );
       }
-      this.onActiveChat(this.activeChat);
-    }
-    this.cdr.detectChanges();
+    });
   }
 
-  // tslint:disable-next-line:typedef
   createConversation() {
-    const conversation = {
-      conversationName: 'Angular 2 交流群',
-      members: [1, 2],
-      lastMessage: 'Angular 2 有哪些开源项目?',
-      lastMessageTime: '2021/06/09 8:20:01',
-      messages: [
-        {
-          message: '这是 Angular 2 交流群',
-          createdAt: '2021/06/09 8:19:01',
-          senderId: 1
-        },
-        {
-          message: 'Angular 2 有哪些开源项目?',
-          createdAt: '2021/06/09 8:20:01',
-          senderId: 2
-        }
-      ]
-    };
+    if (this.listUser.length > 0 && this.indexCreateConversation < this.listUser.length) {
+      const checkExistConversation = this.conversations.filter(value => value.members.indexOf(this.authId) != -1 &&
+        value.members.indexOf(this.listUser[this.indexCreateConversation].id) != -1);
+      if (this.listUser[this.indexCreateConversation].id != this.authId && checkExistConversation.length == 0) {
+        const conversation = {
+          conversationName: [this.username, this.listUser[this.indexCreateConversation].name],
+          members: [this.authId, this.listUser[this.indexCreateConversation].id],
+          lastMessage: '',
+          lastMessageTime: '',
+        };
 
-    const newConversation = this._refConversation.push(conversation);
-    newConversation.set(conversation);
+        const newConversation = this._refConversation.push(conversation);
+        newConversation.set(conversation);
+      }
+    }
   }
 
-  // tslint:disable-next-line:typedef
   onActiveChat(chat) {
     this.activeChat = chat;
     this.messages = chat.messages;
+    this.userRead = chat.members.find(value => value != this.authId);
     // Read message
     const key = chat.key;
     const conversationRef = firebase.database().ref(`conversations/${key}`);
-    conversationRef.child('ownerRead').set(1);
+    conversationRef.child('ownerRead').set(this.authId);
+    if (!chat.checkSeenMessage) {
+      conversationRef.child('checkSeenMessage').set([this.authId]);
+    } else {
+      const checkSeen = chat.checkSeenMessage;
+      if (checkSeen.indexOf(this.authId) == -1) {
+        checkSeen.push(this.authId);
+        conversationRef.child('checkSeenMessage').set(checkSeen);
+      }
+    }
+  }
+
+  logout(): void {
+    localStorage.clear();
+    this._router.navigate(['/auth']);
   }
 }

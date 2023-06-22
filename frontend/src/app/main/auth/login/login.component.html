@@ -1,0 +1,43 @@
+<block-ui></block-ui>
+<div class="login-container" fxLayout="column" fxLayoutAlign="center center">
+  <form
+    [formGroup]="formLogin"
+    (ngSubmit)="submit()"
+    class="form-login">
+    <mat-card class="width-400">
+      <mat-card-title>Đăng nhập</mat-card-title>
+      <mat-card-content fxLayout="column">
+        <mat-label>Email</mat-label>
+        <mat-form-field class="full-width" appearance="outline">
+          <input matInput placeholder="Email" formControlName="email" autocomplete="email" type="text">
+          <mat-error *ngIf="formLogin.get('email')?.hasError('required')">Email không được để trống.</mat-error>
+          <mat-error *ngIf="formLogin.get('email')?.hasError('maxLength')">Email không được quá 255 ký tự.</mat-error>
+          <mat-error *ngIf="formLogin.get('email')?.hasError('email')">Email không đúng định dạng.</mat-error>
+        </mat-form-field>
+        <mat-label>Mật khẩu</mat-label>
+        <mat-form-field class="full-width" appearance="outline">
+          <input matInput placeholder="Mật khẩu" formControlName="password" autocomplete="password" type="password">
+          <mat-error *ngIf="formLogin.get('password')?.hasError('required')">Mật khẩu không được để trống.</mat-error>
+          <mat-error *ngIf="formLogin.get('password')?.hasError('minLength')">Mật khẩu dài tối thiểu 8 ký tự và tối đa 20 ký tự.</mat-error>
+          <mat-error *ngIf="formLogin.get('password')?.hasError('maxLength')">Mật khẩu dài tối thiểu 8 ký tự và tối đa 20 ký tự.</mat-error>
+          <mat-error *ngIf="formLogin.get('password')?.hasError('pattern')">Mật khẩu không đúng định dạng.</mat-error>
+        </mat-form-field>
+        <a routerLink="/auth/register">Đăng ký</a>
+      </mat-card-content>
+      <mat-card-actions class="text-right login">
+        <button
+          mat-raised-button
+          type="submit"
+          color="primary"
+          [disabled]="formLogin.invalid"
+        >
+          Đăng nhập
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+  <div id="copy-right">
+    <p> Copyright (C) {{ currentYear }} PRIVATECH Inc. All Rights Reserved. </p>
+  </div>
+</div>
+

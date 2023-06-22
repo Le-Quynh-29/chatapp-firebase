@@ -1,11 +1,13 @@
 <div class="dashboard">
     <div class="button-row">
-        <button mat-raised-button (click)="notify()" color="accent">Gửi thông báo</button>
-        <button mat-raised-button (click)="updateIntro()" color="accent">Cập nhật giới thiệu</button>
-        <a mat-raised-button [routerLink]="['activation-items']" color="primary">Vật phẩm kích hoạt</a>
-        <a mat-raised-button [routerLink]="['activation-principles']" color="primary">Nguyên lý kích hoạt</a>
-        <a mat-raised-button [routerLink]="['khai-son-lap-huong']" color="primary">Khai Sơn Lập Hướng</a>
-        <a mat-raised-button routerLink="/chat" color="primary">App Chat</a>
+<!--        <button mat-raised-button (click)="notify()" color="accent">Gửi thông báo</button>-->
+<!--        <button mat-raised-button (click)="updateIntro()" color="accent">Cập nhật giới thiệu</button>-->
+<!--        <a mat-raised-button [routerLink]="['activation-items']" color="primary">Vật phẩm kích hoạt</a>-->
+<!--        <a mat-raised-button [routerLink]="['activation-principles']" color="primary">Nguyên lý kích hoạt</a>-->
+<!--        <a mat-raised-button [routerLink]="['khai-son-lap-huong']" color="primary">Khai Sơn Lập Hướng</a>-->
+        <a mat-raised-button routerLink="/chat" color="primary" *ngIf="checkLogin != null">App Chat</a>
+        <a mat-raised-button routerLink="/auth/login" *ngIf="checkLogin == null">Đăng nhập</a>
+        <a mat-raised-button routerLink="/auth/register" *ngIf="checkLogin == null">Đăng Ký</a>
     </div>
     <div class="children">
         <router-outlet></router-outlet>

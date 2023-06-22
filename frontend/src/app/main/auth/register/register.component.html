@@ -1,0 +1,51 @@
+<block-ui></block-ui>
+<div class="register-container" fxLayout="column" fxLayoutAlign="center center">
+  <form
+    [formGroup]="formRegister"
+    (ngSubmit)="submit()"
+    class="form-register">
+    <mat-card class="width-400">
+      <mat-card-title>Đăng ký</mat-card-title>
+      <mat-card-content fxLayout="column">
+        <mat-label>Tên tài khoản</mat-label>
+        <mat-form-field class="full-width" appearance="outline">
+          <input matInput placeholder="Tên tài khoản" formControlName="name" autocomplete="name" type="text">
+          <mat-error *ngIf="formRegister.get('name')?.hasError('required')">Tên tài khoản không được để trống.</mat-error>
+          <mat-error *ngIf="formRegister.get('name')?.hasError('maxLength')">Tên tài khoản không được quá 50 ký tự.</mat-error>
+          <mat-error *ngIf="formRegister.get('name')?.hasError('uniqueUsername')">Tên tài khoản đã tồn tại.</mat-error>
+        </mat-form-field>
+        <mat-label>Email</mat-label>
+        <mat-form-field class="full-width" appearance="outline">
+          <input matInput placeholder="Email" formControlName="email" autocomplete="email" type="text">
+          <mat-error *ngIf="formRegister.get('email')?.hasError('required')">Email không được để trống.</mat-error>
+          <mat-error *ngIf="formRegister.get('email')?.hasError('maxLength')">Email không được quá 255 ký tự.</mat-error>
+          <mat-error *ngIf="formRegister.get('email')?.hasError('email')">Email không đúng định dạng.</mat-error>
+          <mat-error *ngIf="formRegister.get('email')?.hasError('uniqueEmail')">Email đã tồn tại.</mat-error>
+        </mat-form-field>
+        <mat-label>Mật khẩu</mat-label>
+        <mat-form-field class="full-width" appearance="outline">
+          <input matInput placeholder="Mật khẩu" formControlName="password" autocomplete="password" type="password">
+          <mat-error *ngIf="formRegister.get('password')?.hasError('required')">Mật khẩu không được để trống.</mat-error>
+          <mat-error *ngIf="formRegister.get('password')?.hasError('minLength')">Mật khẩu dài tối thiểu 8 ký tự và tối đa 20 ký tự.</mat-error>
+          <mat-error *ngIf="formRegister.get('password')?.hasError('maxLength')">Mật khẩu dài tối thiểu 8 ký tự và tối đa 20 ký tự.</mat-error>
+          <mat-error *ngIf="formRegister.get('password')?.hasError('pattern')">Mật khẩu không đúng định dạng.</mat-error>
+        </mat-form-field>
+        <a routerLink="/auth">Đăng nhập</a>
+      </mat-card-content>
+      <mat-card-actions class="register">
+        <button
+          mat-raised-button
+          type="submit"
+          color="primary"
+          [disabled]="formRegister.invalid"
+        >
+          Đăng ký
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+  <div id="copy-right">
+    <p> Copyright (C) {{ currentYear }} PRIVATECH Inc. All Rights Reserved. </p>
+  </div>
+</div>
+

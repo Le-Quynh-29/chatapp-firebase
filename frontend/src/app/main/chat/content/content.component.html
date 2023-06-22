@@ -10,16 +10,17 @@
         <img class="avatar pointer" src="assets/img/avatars/noavatar.png">
 
         <div fxLayout="column">
-          <span class="name">{{ activeChat.conversationName }}</span>
-          <!-- <span class="status">Online</span> -->
+          <span class="name">
+            {{ activeChat.members.indexOf(authId) == 0 ? activeChat.conversationName[1] : activeChat.conversationName[0] }}
+          </span>
         </div>
       </div>
     </div>
   </mat-toolbar>
   <!-- Active chat -->
   <div class="chat-content" fxLayout="column" fxLayoutAlign="end stretch" *ngIf="activeChat">
-    <perfect-scrollbar 
-      #chatScroll 
+    <perfect-scrollbar
+      #chatScroll
       [config]="DEFAULT_PERFECT_SCROLLBAR_CONFIG"
     >
       <div class="messages-container">
@@ -31,7 +32,7 @@
               <div class="time secondary-text">{{ message.createdAt | date:'short' }}</div>
             </div>
           </div>
-          <div class="me" *ngSwitchCase="1" fxFlexAlign="end" fxLayout="row" fxLayoutAlign="end start">
+          <div class="me" *ngSwitchCase="authId" fxFlexAlign="end" fxLayout="row" fxLayoutAlign="end start">
             <div class="message mat-elevation-z1">
               <span>{{ message.message }}</span>
               <div class="time secondary-text">{{ message.createdAt | date:'short' }}</div>
@@ -53,7 +54,7 @@
   <!-- No active chat -->
   <div class="chat-content chat-start" fxLayout="column" fxLayoutAlign="center center" *ngIf="!activeChat">
 
-    <div 
+    <div
       fxLayout="column" fxLayoutAlign="center center"
       class="big-circle app-logo"
       [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}"

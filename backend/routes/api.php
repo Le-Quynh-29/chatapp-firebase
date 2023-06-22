@@ -14,11 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/user', 'UserController@authRouteAPI');
 
 Route::get('version', 'VersionController');
+
+Route::prefix('auth')->group(function() {
+    Route::post('login', 'AuthController@login');
+    Route::post('register', 'AuthController@register');
+    Route::get('logout', 'AuthController@logout');
+});
 
 Route::prefix('khai-son-lap-huong')->group(function() {
     Route::get('/', 'KhaiSonLapHuongController@index');
@@ -44,4 +48,8 @@ Route::prefix('intro')->group(function() {
 Route::prefix('notifications')->group(function() {
     Route::post('/token', 'NotificationController@addDeviceToken');
     Route::post('/', 'NotificationController@send');
+});
+
+Route::prefix('user')->group(function() {
+    Route::get('/list', 'UserController@index');
 });
